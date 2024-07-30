@@ -18,3 +18,9 @@ interface MapCenter {
     meaurements: MeaurementTablePayloadType[];
     totalPages: number;
   }
+
+  export interface PaginationProps {
+    totalPages: number;
+    setCurrentPage:Function,
+    currentPage:number
+  }

@@ -18,13 +18,13 @@ const API_REQUESTS = {
 };
 
 const MeasurementApi = {
-  getMeaurements: (body: MeasurementPayloadType): Promise<any> => {
+  getMeaurements: (body: MeasurementPayloadType): Promise<MeasurementPayloadType> => {
     return apiRequest('POST', API_REQUESTS.GET_MEAUREMENTS.path, body);
   },
-  addMeaurements: (body: MeasurementPayloadType): Promise<any> => {
+  addMeaurements: (body: MeasurementPayloadType): Promise<MeasurementPayloadType> => {
     return apiRequest('POST', API_REQUESTS.CREATE_MEAUREMENTS.path, body);
   },
-  getAllMeaurements: (): Promise<any> => {
+  getAllMeaurements: (): Promise<MeasurementPayloadType> => {
     return apiRequest('GET', API_REQUESTS.GET_ALL_MEAUREMENTS.path);
   },
 };

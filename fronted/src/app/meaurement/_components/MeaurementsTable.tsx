@@ -1,14 +1,37 @@
 'use client'
 import { useState } from "react";
 import Pagination from "./Pagination"
-import { MeaurementsTableProps } from "@/types";
+import { MeaurementsTableProps , MeaurementTablePayloadType} from "@/types";
+
+
 const MeaurementsTable: React.FC<MeaurementsTableProps> = ({ meaurements, totalPages }) => {
     const [currentPage, setCurrentPage] = useState(1);
     const itemsPerPage = 10;
     let startIdx = (currentPage - 1) * itemsPerPage;
     let endIdx = startIdx + itemsPerPage;
-    let currentItems = meaurements.slice(startIdx, endIdx);
-
+    let currentItems : MeaurementTablePayloadType[] = meaurements.slice(startIdx, endIdx);
+    const mapCurrentItems = (currentItems: MeaurementTablePayloadType[]) => {
+        return currentItems.map((item: MeaurementTablePayloadType) => (
+            <tr key={item._id} className="bg-gray-50 border-b hover:bg-gray-200">
+                <td className="px-6 py-3">{item.address}</td>
+                <td className="px-6 py-3">{item.mapCenter.lat}</td>
+                <td className="px-6 py-3">{item.mapCenter.lng}</td>
+            </tr>
+        ));
+    };
+    
+    const mapEmptyRows = (currentItems: MeaurementTablePayloadType[], itemsPerPage: number) => {
+        return (
+            currentItems.length < itemsPerPage &&
+            Array.from({ length: itemsPerPage - currentItems.length }).map((_, idx) => (
+                <tr key={idx} className="bg-white" style={{ height: '44px' }}>
+                    <td className="px-6 py-3">&nbsp;</td>
+                    <td className="px-6 py-3">&nbsp;</td>
+                    <td className="px-6 py-3">&nbsp;</td>
+                </tr>
+            ))
+        );
+    };
     return (
         <>
             <div className="relative overflow-x-auto" style={{ height: '500px', minHeight: '500px', overflowY: 'auto' }}>
@@ -22,24 +45,8 @@ const MeaurementsTable: React.FC<MeaurementsTableProps> = ({ meaurements, totalP
                         </tr>
                     </thead>
                     <tbody className="bg-white" style={{ height: 'calc(100% - 44px)' }}>
-                        {currentItems.map((item: any) => (
-                            <tr key={item._id} className="bg-gray-50 border-b hover:bg-gray-200">
-                                
-                                <td className="px-6 py-3">{item.address}</td>
-                                <td className="px-6 py-3">{item.mapCenter.lat}</td>
-                                <td className="px-6 py-3">{item.mapCenter.lng}</td>
-                            </tr>
-                        ))}
-                        {currentItems.length < itemsPerPage && (
-                            Array.from({ length: itemsPerPage - currentItems.length }).map((_, idx) => (
-                                <tr key={idx} className="bg-white" style={{ height: '44px' }}>
-                                    <td className="px-6 py-3">&nbsp;</td>
-                                    <td className="px-6 py-3">&nbsp;</td>
-                                    <td className="px-6 py-3">&nbsp;</td>
-                                    <td className="px-6 py-3">&nbsp;</td>
-                                </tr>
-                            ))
-                        )}
+                        {mapCurrentItems(currentItems)}
+                        {mapEmptyRows(currentItems,itemsPerPage)}
                     </tbody>
                 </table>
             </div>

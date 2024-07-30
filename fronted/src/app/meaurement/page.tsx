@@ -3,11 +3,18 @@ import MeaurementsTable from "./_components/MeaurementsTable";
 import { MeaurementTablePayloadType } from "@/types";
 const getAllMeaurements = async () => {
     let itemsPerPage = 10;
-    let meaurements : MeaurementTablePayloadType[] = []
-    meaurements = await MeasurementApi.getAllMeaurements();
-    let totalPages = Math.ceil(meaurements.length / itemsPerPage);
-    return { meaurements, totalPages }
-}
+    let meaurements: MeaurementTablePayloadType[] = [];
+    let totalPages = 0;
+
+    try {
+        meaurements = await MeasurementApi.getAllMeaurements();
+        totalPages = Math.ceil(meaurements.length / itemsPerPage);
+    } catch (error) {
+        console.error('Failed to fetch measurements:', error);
+    }
+
+    return { meaurements, totalPages };
+};
 
 const Meaurement = async () => {
     const { meaurements , totalPages} = await getAllMeaurements()
